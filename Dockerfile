@@ -16,3 +16,6 @@ ENV PACKAGES \
 RUN apt-get update && \
   apt-get install -y --no-install-recommends ${PACKAGES} && \
   rm -rf /var/lib/apt/lists/*
+
+COPY entrypoint.bash /entrypoint.bash
+ENTRYPOINT [ "/bin/bash", "/entrypoint.bash" ]
