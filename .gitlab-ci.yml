@@ -2,11 +2,12 @@ image: docker.io/library/docker:19.03.12
 
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  - docker login ${DOCKERHUB_REGISTRY} -u "${DOCKERHUB_USERNAME}" -p "${DOCKERHUB_PASSWORD}"
 
 stages:
   - build
 
-build-to-gitlab-registry:
+build-to-registry:
   stage: build
   script:
     - |
@@ -17,8 +18,14 @@ build-to-gitlab-registry:
         tag=":$CI_COMMIT_REF_SLUG"
         echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
       fi
-    - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
+    - |
+      docker build \
+        --pull \
+        -t "$CI_REGISTRY_IMAGE${tag}" \
+        -t "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USERNAME}/${CI_PROJECT_NAME}${tag}" \
+        .
     - docker push "$CI_REGISTRY_IMAGE${tag}"
+    - docker push "${DOCKERHUB_REGISTRY}/${DOCKERHUB_USERNAME}/${CI_PROJECT_NAME}${tag}"
   rules:
     - if: $CI_COMMIT_BRANCH
       exists:
