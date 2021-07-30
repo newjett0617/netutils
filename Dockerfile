@@ -18,4 +18,5 @@ ENV PACKAGES \
 
 RUN apt-get update && \
   apt-get install -y --no-install-recommends ${PACKAGES} && \
+  apt-get clean && \
   rm -rf /var/lib/apt/lists/*
