@@ -1,7 +1,7 @@
 FROM docker.io/library/debian:10
 
 COPY entrypoint.bash /entrypoint.bash
-ENTRYPOINT [ "/bin/bash", "/entrypoint.bash" ]
+ENTRYPOINT [ "/entrypoint.bash" ]
 
 ENV PACKAGES \
     ca-certificates \
@@ -9,7 +9,8 @@ ENV PACKAGES \
     dnsutils \
     git \
     iftop \
-    less  \
+    iproute2 \
+    less \
     net-tools \
     netcat \
     procps \
